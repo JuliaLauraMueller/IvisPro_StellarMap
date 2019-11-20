@@ -26,15 +26,22 @@
         1000
       );
 
+      camera.position.z = 10;
+
       var renderer = new THREE.WebGLRenderer();
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(renderer.domElement);
 
       // Cube
       var geometry = new THREE.BoxGeometry(1, 1, 1);
-      var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      var material = new THREE.MeshBasicMaterial({ color: 0xfd59d7 });
       var cube = new THREE.Mesh(geometry, material);
       scene.add(cube);
+
+      var light = new THREE.PointLight(0xffff00);
+      /* position the light so it shines on the cube (x, y, z) */
+      light.position.set(10, 0, 25);
+      scene.add(light);
 
       camera.position.z = 5;
 
