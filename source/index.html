@@ -35,27 +35,52 @@
       document.body.appendChild(renderer.domElement);
 
       var controls = new THREE.OrbitControls(camera, renderer.domElement);
+  
 
-      // Cube
+      var starsGeometry = new THREE.Geometry();
+
+      for ( var i = 0; i < 10000; i ++ ) {
+
+	      var star = new THREE.Vector3();
+	      star.x = THREE.Math.randFloatSpread( 2000 );
+	      star.y = THREE.Math.randFloatSpread( 2000 );
+	      star.z = THREE.Math.randFloatSpread( 2000 );
+
+	      starsGeometry.vertices.push( star );
+
+      } 
+      var starsMaterial = new THREE.PointsMaterial( { color: 0x888888 } );
+      var starField = new THREE.Points( starsGeometry, starsMaterial );
+      scene.add( starField );
+
       var geometry = new THREE.BoxGeometry(1, 1, 1);
-      var material = new THREE.MeshBasicMaterial({ color: 0xfd59d7 });
-      var cube = new THREE.Mesh(geometry, material);
-      scene.add(cube);
+      meshBox = new THREE.Mesh( geometry, 0);
+      var geo = new THREE.EdgesGeometry( meshBox.geometry );
+      var mat = new THREE.LineBasicMaterial( { color: 0xffffff, linewidth: 2 });
+      var wireframe = new THREE.LineSegments( geo, mat );
+      scene.add( wireframe );
 
       var light = new THREE.PointLight(0xffff00);
       /* position the light so it shines on the cube (x, y, z) */
       light.position.set(10, 0, 25);
       scene.add(light);
 
-      camera.position.z = 5;
+      camera.position.z = 1.5;
       var mouse = new THREE.Vector2(1, 1);
 
       document.addEventListener('mousemove', onMouseMove, false);
+      window.addEventListener('resize', onWindowResize, false);
 
       function onMouseMove(event) {
         event.preventDefault();
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
         mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+      }
+
+      function onWindowResize(){
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
       }
 
       // Render the scene
