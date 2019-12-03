@@ -35,8 +35,8 @@
       document.body.appendChild(renderer.domElement);
 
       var controls = new THREE.OrbitControls(camera, renderer.domElement);
-  
 
+      // background
       var starsGeometry = new THREE.Geometry();
 
       for ( var i = 0; i < 10000; i ++ ) {
@@ -53,6 +53,7 @@
       var starField = new THREE.Points( starsGeometry, starsMaterial );
       scene.add( starField );
 
+      // Cube
       var geometry = new THREE.BoxGeometry(1, 1, 1);
       meshBox = new THREE.Mesh( geometry, 0);
       var geo = new THREE.EdgesGeometry( meshBox.geometry );
@@ -71,6 +72,17 @@
       document.addEventListener('mousemove', onMouseMove, false);
       window.addEventListener('resize', onWindowResize, false);
 
+      // load json-file 
+      var loader = new THREE.FileLoader();
+
+      //load a text file and output the result to the console
+      loader.load('data/hygdata_prepared.csv',
+	      function ( data ) {
+		      console.log( data )
+	      },
+      );
+
+      // functions
       function onMouseMove(event) {
         event.preventDefault();
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -87,9 +99,6 @@
       function animate() {
         requestAnimationFrame(animate);
 
-        // // Rotation of the cube
-        // cube.rotation.x += 0.01;
-        // cube.rotation.y += 0.01;
         controls.update();
         renderer.render(scene, camera);
       }
