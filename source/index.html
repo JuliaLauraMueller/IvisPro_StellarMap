@@ -14,8 +14,11 @@
     </style>
   </head>
   <body>
+    <header>Stellar Map</header>
     <script src="js/three.min.js"></script>
     <script src="../node_modules/three/examples/js/controls/OrbitControls.js"></script>
+    <script src="../node_modules/d3/dist/d3.min.js"></script>
+
     <script>
       // Our Javascript will go here.
       // To display anything with three.js, we need scene, camera and renderer
@@ -37,29 +40,27 @@
       var controls = new THREE.OrbitControls(camera, renderer.domElement);
 
       // background
-      var starsGeometry = new THREE.Geometry();
+      // var starsGeometry = new THREE.Geometry();
 
-      for ( var i = 0; i < 10000; i ++ ) {
+      // for (var i = 0; i < 10000; i++) {
+      //   var star = new THREE.Vector3();
+      //   star.x = THREE.Math.randFloatSpread(2000);
+      //   star.y = THREE.Math.randFloatSpread(2000);
+      //   star.z = THREE.Math.randFloatSpread(2000);
 
-	      var star = new THREE.Vector3();
-	      star.x = THREE.Math.randFloatSpread( 2000 );
-	      star.y = THREE.Math.randFloatSpread( 2000 );
-	      star.z = THREE.Math.randFloatSpread( 2000 );
-
-	      starsGeometry.vertices.push( star );
-
-      } 
-      var starsMaterial = new THREE.PointsMaterial( { color: 0x888888 } );
-      var starField = new THREE.Points( starsGeometry, starsMaterial );
-      scene.add( starField );
+      //   starsGeometry.vertices.push(star);
+      // }
+      // var starsMaterial = new THREE.PointsMaterial({ color: 0x888888 });
+      // var starField = new THREE.Points(starsGeometry, starsMaterial);
+      // scene.add(starField);
 
       // Cube
       var geometry = new THREE.BoxGeometry(1, 1, 1);
-      meshBox = new THREE.Mesh( geometry, 0);
-      var geo = new THREE.EdgesGeometry( meshBox.geometry );
-      var mat = new THREE.LineBasicMaterial( { color: 0xffffff, linewidth: 2 });
-      var wireframe = new THREE.LineSegments( geo, mat );
-      scene.add( wireframe );
+      meshBox = new THREE.Mesh(geometry, 0);
+      var geo = new THREE.EdgesGeometry(meshBox.geometry);
+      var mat = new THREE.LineBasicMaterial({ color: 0xffffff, linewidth: 2 });
+      var wireframe = new THREE.LineSegments(geo, mat);
+      scene.add(wireframe);
 
       var light = new THREE.PointLight(0xffff00);
       /* position the light so it shines on the cube (x, y, z) */
@@ -72,15 +73,36 @@
       document.addEventListener('mousemove', onMouseMove, false);
       window.addEventListener('resize', onWindowResize, false);
 
-      // load json-file 
-      var loader = new THREE.FileLoader();
+      // load file
+      const hygData = [];
 
-      //load a text file and output the result to the console
-      loader.load('data/hygdata_prepared.csv',
-	      function ( data ) {
-		      console.log( data )
-	      },
-      );
+      d3.csv('data/hygdata_prepared.csv').then(function(data) {
+        data.forEach(function(d) {
+          d.xCoord = +d.xCoord;
+          d.yCoord = +d.yCoord;
+          d.zCoord = +d.zCoord;
+          hygData.push(d);
+        });
+        // console.log(data[0]);
+        console.log(hygData[0].xCoord);
+
+        // Location of stars from file
+        var starGeometry = new THREE.Geometry();
+
+        for (var i = 0; i < hygData.length; i++) {
+          var x = hygData[i].xCoord;
+          var y = hygData[i].yCoord;
+          var z = hygData[i].zCoord;
+
+          starGeometry.vertices.push(new THREE.Vector3(x, y, z));
+          var dotMaterial = new THREE.PointsMaterial({
+            size: 2,
+            sizeAttenuation: false
+          });
+        }
+        var star = new THREE.Points(starGeometry, dotMaterial);
+        scene.add(star);
+      });
 
       // functions
       function onMouseMove(event) {
@@ -89,7 +111,7 @@
         mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
       }
 
-      function onWindowResize(){
+      function onWindowResize() {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
