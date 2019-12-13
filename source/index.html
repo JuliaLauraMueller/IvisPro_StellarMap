@@ -79,12 +79,13 @@
           d.zCoord = +d.zCoord;
           d.scaledMagnitude = +d.scaledMagnitude;
           d.absoluteMagnitude = +d.absoluteMagnitude;
+          d.spectralColor = +d.spectralColor;
           hygData.push(d);
         });
         // console.log(data[0]);
         // console.log(hygData[0].xCoord);
         console.log(hygData[0]);
-        console.log(hygData[0].absoluteMagnitude);
+        console.log(hygData[0].spectralColor);
 
         // Location of stars from file
         var starGeometry = new THREE.Geometry();
@@ -94,10 +95,16 @@
           var y = hygData[i].yCoord;
           var z = hygData[i].zCoord;
           var scaledMagnitude = hygData[i].scaledMagnitude;
+          var spectralColor = hygData[i].spectralColor;
+          //console.log(hygData[i].spectralColor);
 
           var coordinates = new THREE.Vector3(x, y, z);
-          var SphereGeometry = new THREE.SphereGeometry(scaledMagnitude, 8, 6);
-          var material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+          var SphereGeometry = new THREE.SphereGeometry(
+            scaledMagnitude,
+            10,
+            10
+          );
+          var material = new THREE.MeshBasicMaterial({ color: spectralColor });
           var mesh = new THREE.Mesh(SphereGeometry, material);
 
           mesh.position.x = x;
