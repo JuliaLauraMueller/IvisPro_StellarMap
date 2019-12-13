@@ -50,21 +50,6 @@
 
       var controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-      // background
-      // var starsGeometry = new THREE.Geometry();
-
-      // for (var i = 0; i < 10000; i++) {
-      //   var star = new THREE.Vector3();
-      //   star.x = THREE.Math.randFloatSpread(2000);
-      //   star.y = THREE.Math.randFloatSpread(2000);
-      //   star.z = THREE.Math.randFloatSpread(2000);
-
-      //   starsGeometry.vertices.push(star);
-      // }
-      // var starsMaterial = new THREE.PointsMaterial({ color: 0x888888 });
-      // var starField = new THREE.Points(starsGeometry, starsMaterial);
-      // scene.add(starField);
-
       // Cube
       var geometry = new THREE.BoxGeometry(1, 1, 1);
       meshBox = new THREE.Mesh(geometry, 0);
@@ -92,10 +77,12 @@
           d.xCoord = +d.xCoord;
           d.yCoord = +d.yCoord;
           d.zCoord = +d.zCoord;
+          d.absoluteMagnitude = +d.absoluteMagnitude;
           hygData.push(d);
         });
         // console.log(data[0]);
-        console.log(hygData[0].xCoord);
+        // console.log(hygData[0].xCoord);
+        // console.log(hygData[0].absoluteMagnitude);
 
         // Location of stars from file
         var starGeometry = new THREE.Geometry();
@@ -104,15 +91,30 @@
           var x = hygData[i].xCoord;
           var y = hygData[i].yCoord;
           var z = hygData[i].zCoord;
+          var absMagnitude = hygData[i].absoluteMagnitude;
 
-          starGeometry.vertices.push(new THREE.Vector3(x, y, z));
-          var dotMaterial = new THREE.PointsMaterial({
-            size: 2,
-            sizeAttenuation: false
-          });
+          var coordinates = new THREE.Vector3(x, y, z);
+          var SphereGeometry = new THREE.SphereGeometry(0.02, 8, 6);
+          var material = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+          var mesh = new THREE.Mesh(SphereGeometry, material);
+
+          mesh.position.x = x;
+          mesh.position.y = y;
+          mesh.position.z = z;
+
+          scene.add(mesh);
+
+          // var star = new THREE.Sphere(coordinates, 0.1);
+          // scene.add(star);
+
+          // starGeometry.vertices.push(new THREE.Vector3(x, y, z));
+          // var dotMaterial = new THREE.PointsMaterial({
+          //   size: absMagnitude,
+          //   sizeAttenuation: false
+          // });
         }
-        var star = new THREE.Points(starGeometry, dotMaterial);
-        scene.add(star);
+
+        //var star = new THREE.Points(starGeometry, dotMaterial);
       });
 
       // functions
