@@ -7,9 +7,50 @@
       body {
         margin: 0;
       }
+
       canvas {
         width: 100%;
         height: 100%;
+      }
+
+      .data {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        width: 300px;
+        height: 200px;
+        background: rgba(0, 127, 127, 0.25);
+        box-shadow: 0px 0px 12px rgba(0, 255, 255, 0.5);
+        border: 1px solid rgba(127, 255, 255, 0.25);
+        font-family: Helvetica, sans-serif;
+        text-align: center;
+        line-height: normal;
+        cursor: default;
+      }
+      .data .number {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        font-size: 12px;
+        color: rgba(127, 255, 255, 0.75);
+      }
+      .data .symbol {
+        position: absolute;
+        top: 40px;
+        left: 0px;
+        right: 0px;
+        font-size: 60px;
+        font-weight: bold;
+        color: rgba(255, 255, 255, 0.75);
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+      }
+      .data .details {
+        position: absolute;
+        bottom: 15px;
+        left: 0px;
+        right: 0px;
+        font-size: 12px;
+        color: rgba(127, 255, 255, 0.75);
       }
     </style>
 
@@ -21,12 +62,7 @@
     />
   </head>
   <body>
-    <header
-      class="stellar-header"
-      style="font-size: 2em; background-color: black; color: white;"
-    >
-      Stellar Map
-    </header>
+    <div class="data" , id="dataCanvas"></div>
     <script src="js/three.min.js"></script>
     <script src="../node_modules/three/examples/js/controls/OrbitControls.js"></script>
     <script src="../node_modules/d3/dist/d3.min.js"></script>
@@ -75,6 +111,7 @@
 
       // load file
       const hygData = [];
+      var selected;
 
       d3.csv('data/hygdata_prepared.csv').then(function(data) {
         data.forEach(function(d) {
@@ -147,6 +184,11 @@
           mesh.position.y = y;
           mesh.position.z = z;
 
+          if (i == 0) {
+            selected = mesh;
+            console.log(selected);
+          }
+
           scene.add(mesh);
 
           // var star = new THREE.Sphere(coordinates, 0.1);
@@ -162,6 +204,9 @@
         //var star = new THREE.Points(starGeometry, dotMaterial);
       });
 
+      var dataCanvas = document.getElementById('dataCanvas');
+
+      console.log(dataCanvas);
       // functions
       function onMouseMove(event) {
         event.preventDefault();
