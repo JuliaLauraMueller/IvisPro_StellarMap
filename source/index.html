@@ -88,8 +88,26 @@
         });
         // console.log(data[0]);
         // console.log(hygData[0].xCoord);
-        console.log(hygData[0]);
-        console.log(hygData[0].spectralColor);
+        console.log(hygData.length);
+
+        class Star extends THREE.Mesh {
+          constructor(
+            geometry,
+            material,
+            designation,
+            distance,
+            luminosity,
+            spectralType,
+            constellation
+          ) {
+            super(geometry, material);
+            this.designation = designation;
+            this.distance = distance;
+            this.luminosity = luminosity;
+            this.spectralType = spectralType;
+            this.constellation = constellation;
+          }
+        }
 
         // Location of stars from file
         var starGeometry = new THREE.Geometry();
@@ -100,6 +118,11 @@
           var z = hygData[i].zCoord;
           var scaledMagnitude = hygData[i].scaledMagnitude;
           var spectralColor = hygData[i].spectralColor;
+          var designation = hygData[i].designation;
+          var distance = hygData[i].distance;
+          var luminosity = hygData[i].luminosity;
+          var spectralType = hygData[i].spectralType;
+          var constellation = hygData[i].constellation;
           //console.log(hygData[i].spectralColor);
 
           var coordinates = new THREE.Vector3(x, y, z);
@@ -109,7 +132,16 @@
             10
           );
           var material = new THREE.MeshBasicMaterial({ color: spectralColor });
-          var mesh = new THREE.Mesh(SphereGeometry, material);
+          // var mesh = new THREE.Mesh(SphereGeometry, material);
+          var mesh = new Star(
+            SphereGeometry,
+            material,
+            designation,
+            distance,
+            luminosity,
+            spectralType,
+            constellation
+          );
 
           mesh.position.x = x;
           mesh.position.y = y;
@@ -164,6 +196,32 @@
             INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
             // set a new color for closest object
             INTERSECTED.material.color.setHex(0x00ff00);
+            console.log(
+              'designation: ' +
+                INTERSECTED.designation +
+                '\n' +
+                'distance: ' +
+                INTERSECTED.distance +
+                '\n' +
+                'x: ' +
+                INTERSECTED.position.x +
+                '\n' +
+                'y: ' +
+                INTERSECTED.position.y +
+                '\n' +
+                'z: ' +
+                INTERSECTED.position.z +
+                '\n' +
+                'luminosity: ' +
+                INTERSECTED.luminosity +
+                '\n' +
+                'spectraltype: ' +
+                INTERSECTED.spectralType +
+                '\n' +
+                'constellation: ' +
+                INTERSECTED.constellation +
+                '\n'
+            );
           }
         } // there are no intersections
         else {
