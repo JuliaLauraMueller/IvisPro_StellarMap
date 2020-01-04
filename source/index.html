@@ -11,23 +11,40 @@
       canvas {
         width: 100%;
         height: 100%;
+        display: block;
       }
 
-      .data {
+      .mapTitle {
+        width: 100%;
         position: absolute;
-        bottom: 20px;
-        left: 20px;
-        width: 300px;
-        height: 200px;
+        top: 15px;
+        font-size: 35px;
+        font-family: Helvetica, sans-serif;
+        text-align: center;
+        line-height: normal;
+        font-weight: bold;
+        color: rgba(255, 255, 255, 0.75);
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+      }
+
+      .menuElement {
         background: rgba(0, 70, 70, 0.75);
         box-shadow: 0px 0px 12px rgba(0, 255, 255, 0.5);
         border: 1px solid rgba(127, 255, 255, 0.25);
         font-family: Helvetica, sans-serif;
         text-align: center;
         line-height: normal;
+      }
+
+      #data {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        width: 300px;
+        height: 250px;
         cursor: default;
       }
-      .data .title {
+      .menuElement .title {
         position: absolute;
         top: 10px;
         left: 0px;
@@ -37,7 +54,7 @@
         color: rgba(255, 255, 255, 0.75);
         text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
       }
-      .data .details {
+      .menuElement .details {
         text-align: left;
         position: absolute;
         right: 0px;
@@ -79,7 +96,7 @@
         position: absolute;
         bottom: 20px;
         width: 100%;
-        text-align: right;
+        text-align: center;
       }
 
       button {
@@ -100,6 +117,60 @@
         color: #000000;
         background-color: rgba(0, 255, 255, 0.75);
       }
+
+      #legend {
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+        width: 300px;
+        height: 250px;
+        cursor: default;
+      }
+      .dot {
+        position: absolute;
+        text-align: left;
+        left: 10px;
+        height: 25px;
+        width: 25px;
+        border-radius: 50%;
+      }
+      #oType {
+        background-color: #6573fa;
+        top: 40px;
+      }
+      #bType {
+        background-color: #8c99fc;
+        top: 70px;
+      }
+      #aType {
+        background-color: #cacefd;
+        top: 100px;
+      }
+      #fType {
+        background-color: #fff1d7;
+        top: 130px;
+      }
+      #gType {
+        background-color: #feda98;
+        top: 160px;
+      }
+      #kType {
+        background-color: #fda85a;
+        top: 190px;
+      }
+      #mType {
+        background-color: #fc6647;
+        top: 220px;
+      }
+      .menuElement .legendDetails {
+        text-align: left;
+        position: absolute;
+        top: 4px;
+        left: 35px;
+        font-size: 16px;
+        white-space: nowrap;
+        color: rgba(127, 255, 255, 0.75);
+      }
     </style>
 
     <link
@@ -110,7 +181,11 @@
     />
   </head>
   <body>
-    <div class="data" , id="dataCanvas">
+    <div class="mapTitle">Stellar Map</div>
+
+    <div id="container"></div>
+
+    <div class="menuElement" , id="data">
       <div class="title">Selected Star</div>
       <div class="details" , id="designation"></div>
       <div class="details" , id="constellation"></div>
@@ -118,6 +193,32 @@
       <div class="details" , id="luminosity"></div>
       <div class="details" , id="distance"></div>
       <div class="details" , id="coordinates"></div>
+    </div>
+
+    <div class="menuElement" id="legend">
+      <div class="title">Spectral Types</div>
+
+      <span class="dot" , id="oType"
+        ><span class="legendDetails">O-Type Star</span></span
+      >
+      <span class="dot" , id="bType"
+        ><span class="legendDetails">B-Type Star</span></span
+      >
+      <span class="dot" , id="fType"
+        ><span class="legendDetails">F-Type Star</span></span
+      >
+      <span class="dot" , id="aType"
+        ><span class="legendDetails">A-Type Star</span></span
+      >
+      <span class="dot" , id="gType"
+        ><span class="legendDetails">G-Type Star</span></span
+      >
+      <span class="dot" , id="kType"
+        ><span class="legendDetails">K-Type Star</span></span
+      >
+      <span class="dot" , id="mType"
+        ><span class="legendDetails">M-Type Star</span></span
+      >
     </div>
     <div id="menu">
       <button id="sunButton">Back To Sol</button>
@@ -167,9 +268,12 @@
       const bgTexture = loader.load('img/milkyWay.jpg');
       scene.background = bgTexture;
 
-      var renderer = new THREE.WebGLRenderer();
+      var renderer = new THREE.WebGLRenderer({ alpha: true });
+      //renderer.setClearColor('rgb(0, 70, 70)', 0.75);
+      renderer.setClearColor(0x000000, 1);
+      renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setSize(window.innerWidth, window.innerHeight);
-      document.body.appendChild(renderer.domElement);
+      document.getElementById('container').appendChild(renderer.domElement);
 
       var controls = new CameraControls(camera, renderer.domElement);
 
@@ -214,9 +318,6 @@
             hygData.push(d);
           });
 
-          // Location of stars from file
-          var starGeometry = new THREE.Geometry();
-
           for (var i = 0; i < hygData.length; i++) {
             var x = hygData[i].xCoord;
             var y = hygData[i].yCoord;
@@ -232,9 +333,9 @@
 
             var coordinates = new THREE.Vector3(x, y, z);
             var SphereGeometry = new THREE.SphereGeometry(
-              scaledMagnitude,
-              10,
-              10
+              scaledMagnitude / 1.75,
+              8,
+              8
             );
             var material = new THREE.MeshBasicMaterial({
               color: spectralColor
@@ -272,7 +373,7 @@
             if (i == hygData.length - 1) {
               animate();
               controls.forward(
-                camera.position.distanceTo(prevIntersected.position) - 0.75
+                camera.position.distanceTo(prevIntersected.position) - 0.5
               );
               controls.setTarget(
                 prevIntersected.position.x,
@@ -285,7 +386,42 @@
         });
       }
 
-      // functions
+      ////////////////////////////////
+      // Coordinations Scene
+      ////////////////////////////////
+
+      const sceneView = {
+        left: 0,
+        bottom: 0,
+        width: 1.0,
+        height: 1.0
+      };
+
+      const coordScene = new THREE.Scene();
+      // coordScene.background = new THREE.Color('rgba(0, 70, 70, 0.75)');
+
+      const coordSceneRatio = 0.15;
+      const coordSceneSize = 1 - coordSceneRatio;
+      const coordSceneView = {
+        left: sceneView.left + coordSceneSize,
+        bottom: sceneView.bottom + coordSceneSize,
+        width: sceneView.width * coordSceneRatio,
+        height: sceneView.height * coordSceneRatio
+      };
+
+      const coordCamera = new THREE.OrthographicCamera(
+        10 / -2,
+        10 / 2,
+        10 / 2,
+        10 / -2,
+        0.011,
+        1000
+      );
+      coordCamera.position.copy(camera.position);
+
+      const axesHelper = new THREE.AxesHelper(3);
+      coordScene.add(axesHelper);
+
       function onMouseMove(event) {
         event.preventDefault();
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -299,7 +435,7 @@
           case 1: // left mouse click
             if (INTERSECTED) {
               var camerapos = camera.position;
-              camerapos.setLength(0.75);
+              camerapos.setLength(0.5);
 
               controls.setLookAt(
                 INTERSECTED.position.x - camerapos.x,
@@ -348,7 +484,7 @@
         'click',
         function() {
           var camerapos = camera.position;
-          camerapos.setLength(0.75);
+          camerapos.setLength(0.5);
           controls.setLookAt(
             prevIntersected.position.x - camerapos.x,
             prevIntersected.position.y - camerapos.y,
@@ -361,6 +497,38 @@
         },
         false
       );
+
+      function resizeRendererToDisplaySize(renderer) {
+        const canvas = renderer.domElement;
+        const pixelRatio = window.devicePixelRatio;
+        const width = (canvas.clientWidth * pixelRatio) | 0;
+        const height = (canvas.clientHeight * pixelRatio) | 0;
+        const needResize = canvas.width !== width || canvas.height !== height;
+        if (needResize) {
+          renderer.setSize(width, height, false);
+        }
+        return needResize;
+      }
+
+      function renderSceneInfo(scene, camera, left, bottom, width, height) {
+        const canvas = renderer.domElement;
+        if (resizeRendererToDisplaySize(renderer)) {
+          camera.aspect = canvas.clientWidth / canvas.clientHeight;
+          camera.updateProjectionMatrix();
+        }
+
+        // take the coordinate from 0-1 space, and put them
+        // in screen space, baed on the size of the canvas.
+        var nleft = Math.floor(canvas.width * left);
+        var nbottom = Math.floor(canvas.height * bottom);
+        var nwidth = Math.floor(canvas.width * width);
+        var nheight = Math.floor(canvas.height * height);
+        renderer.setViewport(nleft, nbottom, nwidth, nheight);
+        renderer.setScissor(nleft, nbottom, nwidth, nheight);
+        renderer.setScissorTest(true);
+        // renderer.setClearColor("lightblue");
+        renderer.render(scene, camera);
+      }
 
       // Render the scene
       function animate() {
@@ -404,7 +572,27 @@
           //     by setting current intersection object to "nothing"
           INTERSECTED = null;
         }
-        renderer.render(scene, camera);
+
+        renderSceneInfo(
+          scene,
+          camera,
+          sceneView.left,
+          sceneView.bottom,
+          sceneView.width,
+          sceneView.height
+        );
+
+        coordCamera.position.copy(camera.position);
+        coordCamera.lookAt(coordScene.position);
+
+        renderSceneInfo(
+          coordScene,
+          coordCamera,
+          coordSceneView.left,
+          coordSceneView.bottom,
+          coordSceneView.width,
+          coordSceneView.height
+        );
       }
     </script>
   </body>
