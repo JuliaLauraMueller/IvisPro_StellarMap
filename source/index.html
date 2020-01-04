@@ -23,18 +23,29 @@
       #loading-screen.fade-out {
         opacity: 0;
       }
-
+      #loaderTitle {
+        width: 100%;
+        position: relative;
+        top: 47.5%;
+        font-size: 35px;
+        font-family: Helvetica, sans-serif;
+        text-align: center;
+        line-height: normal;
+        font-weight: bold;
+        color: rgba(0, 255, 255, 0.75);
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+      }
       #loader {
         display: block;
         position: relative;
         left: 50%;
-        top: 50%;
+        top: 40%;
         width: 150px;
         height: 150px;
         margin: -75px 0 0 -75px;
         border-radius: 50%;
         border: 3px solid transparent;
-        border-top-color: #9370db;
+        border-top-color: rgba(0, 255, 255, 0.75);
         -webkit-animation: spin 2s linear infinite;
         animation: spin 2s linear infinite;
       }
@@ -47,7 +58,7 @@
         bottom: 5px;
         border-radius: 50%;
         border: 3px solid transparent;
-        border-top-color: #ba55d3;
+        border-top-color: rgba(0, 255, 255, 0.5);
         -webkit-animation: spin 3s linear infinite;
         animation: spin 3s linear infinite;
       }
@@ -60,7 +71,7 @@
         bottom: 15px;
         border-radius: 50%;
         border: 3px solid transparent;
-        border-top-color: #ff00ff;
+        border-top-color: rgba(0, 255, 255, 0.25);
         -webkit-animation: spin 1.5s linear infinite;
         animation: spin 1.5s linear infinite;
       }
@@ -263,6 +274,7 @@
   </head>
   <section id="loading-screen">
     <div id="loader"></div>
+    <div id="loaderTitle">Loading</div>
   </section>
   <body>
     <div class="mapTitle">Stellar Map</div>
