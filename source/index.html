@@ -8,6 +8,72 @@
         margin: 0;
       }
 
+      #start-screen {
+        position: absolute;
+        z-index: 3;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #000000;
+        opacity: 1;
+        transition: 0s opacity;
+      }
+
+      #start-screen.fade-out {
+        opacity: 0;
+      }
+
+      #start-menu {
+        position: absolute;
+        top: 53%;
+        width: 100%;
+        text-align: center;
+      }
+
+      .start-intro {
+        width: 100%;
+        position: absolute;
+        top: 5%;
+        font-family: Helvetica, sans-serif;
+        text-align: center;
+        line-height: normal;
+        font-size: 25px;
+        color: rgba(127, 255, 255, 0.75);
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+      }
+      .start-title {
+        width: 100%;
+        position: absolute;
+        top: 20%;
+        font-size: 50px;
+        font-family: Helvetica, sans-serif;
+        text-align: center;
+        line-height: normal;
+        font-weight: bold;
+        color: rgba(255, 255, 255, 0.75);
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+      }
+      .start-credits {
+        width: 100%;
+        position: absolute;
+        top: 80%;
+        font-family: Helvetica, sans-serif;
+        text-align: center;
+        line-height: normal;
+        font-size: 20px;
+        color: rgba(127, 255, 255, 0.75);
+        text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+      }
+
+      #startButton {
+        position: relative;
+        font-size: 1.5em;
+        padding: 5px 10px;
+        height: 4em;
+        width: 8em;
+      }
+
       #loading-screen {
         position: absolute;
         z-index: 2;
@@ -272,6 +338,20 @@
       media="screen,projection"
     />
   </head>
+  <section id="start-screen">
+    <div class="start-intro">
+      Welcome to our information visualization project
+    </div>
+    <div class="start-title">
+      Stellar Map
+    </div>
+    <div class="start-credits">
+      created by Benjamin Huber & Julia Müller
+    </div>
+    <div id="start-menu">
+      <button id="startButton">Explore Stellar Map</button>
+    </div>
+  </section>
   <section id="loading-screen">
     <div id="loader"></div>
     <div id="loaderTitle">Loading</div>
@@ -407,8 +487,6 @@
       var luminosityDiv = document.getElementById('luminosity');
       var distanceDiv = document.getElementById('distance');
       var coordDiv = document.getElementById('coordinates');
-
-      loadData();
 
       function loadData() {
         d3.csv('data/hygdata_prepared.csv').then(function(data) {
@@ -601,6 +679,19 @@
             prevIntersected.position.z,
             true
           );
+        },
+        false
+      );
+
+      var button = document.getElementById('startButton');
+      button.addEventListener(
+        'click',
+        function() {
+          const startScreen = document.getElementById('start-screen');
+          startScreen.classList.add('fade-out');
+          startScreen.remove();
+          // startScreen.addEventListener('transitionend', onTransitionEnd);
+          loadData();
         },
         false
       );
