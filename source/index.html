@@ -117,6 +117,10 @@
 
       camera.position.z = 10;
 
+      const loader = new THREE.TextureLoader();
+      const bgTexture = loader.load('img/milkyWay.jpg');
+      scene.background = bgTexture;
+
       var renderer = new THREE.WebGLRenderer();
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(renderer.domElement);
@@ -241,7 +245,6 @@
         //var star = new THREE.Points(starGeometry, dotMaterial);
       });
 
-      console.log(dataCanvas);
       // functions
       function onMouseMove(event) {
         event.preventDefault();
