@@ -466,7 +466,6 @@
       light.position.set(10, 0, 25);
       scene.add(light);
 
-      camera.position.z = 1.5;
       var mouse = new THREE.Vector2(1, 1);
       var raycaster = new THREE.Raycaster();
       var INTERSECTED;
@@ -477,6 +476,7 @@
       window.addEventListener('resize', onWindowResize, false);
       window.addEventListener('mousemove', onMouseMove, false);
       window.addEventListener('mousedown', onMouseDown, false);
+      window.addEventListener('dblclick', onDblclick, false);
 
       // load file
       const hygData = [];
@@ -615,6 +615,21 @@
 
       function onMouseDown(event) {
         event.preventDefault();
+        if (INTERSECTED) {
+          designationDiv.textContent =
+            'designation: ' + INTERSECTED.designation;
+          constellationDiv.textContent =
+            'constellation: ' + INTERSECTED.constellation;
+          spectralDiv.textContent =
+            'spectral type: ' + INTERSECTED.spectralType;
+          luminosityDiv.textContent = 'luminosity: ' + INTERSECTED.luminosity;
+          distanceDiv.textContent = 'distance: ' + INTERSECTED.distance;
+          coordDiv.textContent = 'coordinates: ' + INTERSECTED.position.x;
+        }
+      }
+
+      function onDblclick(event) {
+        event.preventDefault();
 
         switch (event.which) {
           case 1: // left mouse click
@@ -631,25 +646,6 @@
                 INTERSECTED.position.z,
                 true
               );
-
-              // controls.lerpLookAt(
-              //   camera.position.x,
-              //   camera.position.y,
-              //   camera.position.z,
-              //   prevIntersected.position.x,
-              //   prevIntersected.position.y,
-              //   prevIntersected.position.z,
-              //   INTERSECTED.position.x - camerapos.x,
-              //   INTERSECTED.position.y - camerapos.y,
-              //   INTERSECTED.position.z - camerapos.z,
-              //   INTERSECTED.position.x,
-              //   INTERSECTED.position.y,
-              //   INTERSECTED.position.z,
-              //   1,
-              //   true
-              // );
-              // prevIntersected = INTERSECTED;
-              // controls.saveState();
             }
             break;
 
@@ -690,7 +686,6 @@
           const startScreen = document.getElementById('start-screen');
           startScreen.classList.add('fade-out');
           startScreen.remove();
-          // startScreen.addEventListener('transitionend', onTransitionEnd);
           loadData();
         },
         false
@@ -750,16 +745,6 @@
             INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
             // set a new color for closest object
             INTERSECTED.material.color.setHex(0x00ff00);
-
-            designationDiv.textContent =
-              'designation: ' + INTERSECTED.designation;
-            constellationDiv.textContent =
-              'constellation: ' + INTERSECTED.constellation;
-            spectralDiv.textContent =
-              'spectral type: ' + INTERSECTED.spectralType;
-            luminosityDiv.textContent = 'luminosity: ' + INTERSECTED.luminosity;
-            distanceDiv.textContent = 'distance: ' + INTERSECTED.distance;
-            coordDiv.textContent = 'coordinates: ' + INTERSECTED.position.x;
           }
         } // there are no intersections
         else {
