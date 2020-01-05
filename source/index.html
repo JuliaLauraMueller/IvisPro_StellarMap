@@ -449,8 +449,10 @@
       });
 
       const loader = new THREE.TextureLoader();
-      const bgTexture = loader.load('img/milkyWay.jpg');
+      const bgTexture = loader.load('img/milkyWayBackground.jpg');
       scene.background = bgTexture;
+
+      var starTexture = loader.load('img/grey_star4.jpg');
 
       var renderer = new THREE.WebGLRenderer({ alpha: true });
       //renderer.setClearColor('rgb(0, 70, 70)', 0.75);
@@ -520,7 +522,8 @@
               8
             );
             var material = new THREE.MeshBasicMaterial({
-              color: spectralColor
+              color: spectralColor,
+              map: starTexture
             });
             // var mesh = new THREE.Mesh(SphereGeometry, material);
             var mesh = new Star(
