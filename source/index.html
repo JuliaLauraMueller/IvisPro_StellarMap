@@ -3,334 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <title>Stellar Map</title>
-    <style>
-      body {
-        margin: 0;
-      }
 
-      #start-screen {
-        position: absolute;
-        z-index: 3;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #000000;
-        opacity: 1;
-        transition: 0s opacity;
-      }
-
-      #start-screen.fade-out {
-        opacity: 0;
-      }
-
-      #start-menu {
-        position: absolute;
-        top: 53%;
-        width: 100%;
-        text-align: center;
-      }
-
-      .start-intro {
-        width: 100%;
-        position: absolute;
-        top: 5%;
-        font-family: Helvetica, sans-serif;
-        text-align: center;
-        line-height: normal;
-        font-size: 25px;
-        color: rgba(127, 255, 255, 0.75);
-        text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
-      }
-      .start-title {
-        width: 100%;
-        position: absolute;
-        top: 20%;
-        font-size: 50px;
-        font-family: Helvetica, sans-serif;
-        text-align: center;
-        line-height: normal;
-        font-weight: bold;
-        color: rgba(255, 255, 255, 0.75);
-        text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
-      }
-      .start-credits {
-        width: 100%;
-        position: absolute;
-        top: 80%;
-        font-family: Helvetica, sans-serif;
-        text-align: center;
-        line-height: normal;
-        font-size: 20px;
-        color: rgba(127, 255, 255, 0.75);
-        text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
-      }
-
-      #startButton {
-        position: relative;
-        font-size: 1.5em;
-        padding: 5px 10px;
-        height: 4em;
-        width: 8em;
-      }
-
-      #loading-screen {
-        position: absolute;
-        z-index: 2;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #000000;
-        opacity: 1;
-        transition: 1s opacity;
-      }
-
-      #loading-screen.fade-out {
-        opacity: 0;
-      }
-      #loaderTitle {
-        width: 100%;
-        position: relative;
-        top: 47.5%;
-        font-size: 35px;
-        font-family: Helvetica, sans-serif;
-        text-align: center;
-        line-height: normal;
-        font-weight: bold;
-        color: rgba(0, 255, 255, 0.75);
-        text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
-      }
-      #loader {
-        display: block;
-        position: relative;
-        left: 50%;
-        top: 40%;
-        width: 150px;
-        height: 150px;
-        margin: -75px 0 0 -75px;
-        border-radius: 50%;
-        border: 3px solid transparent;
-        border-top-color: rgba(0, 255, 255, 0.75);
-        -webkit-animation: spin 2s linear infinite;
-        animation: spin 2s linear infinite;
-      }
-      #loader:before {
-        content: '';
-        position: absolute;
-        top: 5px;
-        left: 5px;
-        right: 5px;
-        bottom: 5px;
-        border-radius: 50%;
-        border: 3px solid transparent;
-        border-top-color: rgba(0, 255, 255, 0.5);
-        -webkit-animation: spin 3s linear infinite;
-        animation: spin 3s linear infinite;
-      }
-      #loader:after {
-        content: '';
-        position: absolute;
-        top: 15px;
-        left: 15px;
-        right: 15px;
-        bottom: 15px;
-        border-radius: 50%;
-        border: 3px solid transparent;
-        border-top-color: rgba(0, 255, 255, 0.25);
-        -webkit-animation: spin 1.5s linear infinite;
-        animation: spin 1.5s linear infinite;
-      }
-      @-webkit-keyframes spin {
-        0% {
-          -webkit-transform: rotate(0deg);
-          -ms-transform: rotate(0deg);
-          transform: rotate(0deg);
-        }
-        100% {
-          -webkit-transform: rotate(360deg);
-          -ms-transform: rotate(360deg);
-          transform: rotate(360deg);
-        }
-      }
-      @keyframes spin {
-        0% {
-          -webkit-transform: rotate(0deg);
-          -ms-transform: rotate(0deg);
-          transform: rotate(0deg);
-        }
-        100% {
-          -webkit-transform: rotate(360deg);
-          -ms-transform: rotate(360deg);
-          transform: rotate(360deg);
-        }
-      }
-
-      canvas {
-        width: 100%;
-        height: 100%;
-        display: block;
-      }
-
-      .mapTitle {
-        width: 100%;
-        position: absolute;
-        top: 15px;
-        font-size: 35px;
-        font-family: Helvetica, sans-serif;
-        text-align: center;
-        line-height: normal;
-        font-weight: bold;
-        color: rgba(255, 255, 255, 0.75);
-        text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
-      }
-
-      .menuElement {
-        background: rgba(0, 70, 70, 0.75);
-        box-shadow: 0px 0px 12px rgba(0, 255, 255, 0.5);
-        border: 1px solid rgba(127, 255, 255, 0.25);
-        font-family: Helvetica, sans-serif;
-        text-align: center;
-        line-height: normal;
-      }
-
-      #data {
-        position: absolute;
-        bottom: 20px;
-        left: 20px;
-        width: 300px;
-        height: 250px;
-        cursor: default;
-      }
-      .menuElement .title {
-        position: absolute;
-        top: 10px;
-        left: 0px;
-        right: 0px;
-        font-size: 20px;
-        font-weight: bold;
-        color: rgba(255, 255, 255, 0.75);
-        text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
-      }
-      .menuElement .details {
-        text-align: left;
-        position: absolute;
-        right: 0px;
-        font-size: 16px;
-        color: rgba(127, 255, 255, 0.75);
-      }
-
-      #designation {
-        top: 40px;
-        left: 10px;
-      }
-
-      #constellation {
-        top: 60px;
-        left: 10px;
-      }
-
-      #spectralType {
-        top: 80px;
-        left: 10px;
-      }
-
-      #luminosity {
-        top: 100px;
-        left: 10px;
-      }
-
-      #distance {
-        top: 120px;
-        left: 10px;
-      }
-
-      #coordinates {
-        top: 140px;
-        left: 10px;
-      }
-
-      #menu {
-        position: absolute;
-        bottom: 20px;
-        width: 100%;
-        text-align: center;
-      }
-
-      button {
-        background: rgba(0, 70, 70, 0.75);
-        box-shadow: 0px 0px 12px rgba(0, 255, 255, 0.5);
-        border: 1px solid rgba(127, 255, 255, 0.25);
-        font-size: 1.2em;
-        color: rgba(127, 255, 255, 0.75);
-        padding: 5px 10px;
-        height: 3em;
-        width: 7em;
-        cursor: pointer;
-      }
-      button:hover {
-        background-color: rgba(0, 255, 255, 0.5);
-      }
-      button:active {
-        color: #000000;
-        background-color: rgba(0, 255, 255, 0.75);
-      }
-
-      #legend {
-        position: absolute;
-        right: 20px;
-        bottom: 20px;
-        width: 300px;
-        height: 250px;
-        cursor: default;
-      }
-      .dot {
-        position: absolute;
-        text-align: left;
-        left: 10px;
-        height: 25px;
-        width: 25px;
-        border-radius: 50%;
-      }
-      #oType {
-        background-color: #6573fa;
-        top: 40px;
-      }
-      #bType {
-        background-color: #8c99fc;
-        top: 70px;
-      }
-      #aType {
-        background-color: #cacefd;
-        top: 100px;
-      }
-      #fType {
-        background-color: #fff1d7;
-        top: 130px;
-      }
-      #gType {
-        background-color: #feda98;
-        top: 160px;
-      }
-      #kType {
-        background-color: #fda85a;
-        top: 190px;
-      }
-      #mType {
-        background-color: #fc6647;
-        top: 220px;
-      }
-      .menuElement .legendDetails {
-        text-align: left;
-        position: absolute;
-        top: 4px;
-        left: 35px;
-        font-size: 16px;
-        white-space: nowrap;
-        color: rgba(127, 255, 255, 0.75);
-      }
-    </style>
-
+    <!-- CSS -->
     <link
       href="css/style.css"
       type="text/css"
@@ -338,6 +12,8 @@
       media="screen,projection"
     />
   </head>
+
+  <!-- Body -->
   <section id="start-screen">
     <div class="start-intro">
       Welcome to our information visualization project
@@ -368,7 +44,9 @@
       <div class="details" , id="spectralType"></div>
       <div class="details" , id="luminosity"></div>
       <div class="details" , id="distance"></div>
-      <div class="details" , id="coordinates"></div>
+      <div class="details" , id="coordinatesX"></div>
+      <div class="details" , id="coordinatesY"></div>
+      <div class="details" , id="coordinatesZ"></div>
     </div>
 
     <div class="menuElement" id="legend">
@@ -399,6 +77,8 @@
     <div id="menu">
       <button id="sunButton">Back To Sol</button>
     </div>
+
+    <!-- JavaScript -->
     <script src="js/three.min.js"></script>
     <script src="../node_modules/three/examples/js/controls/OrbitControls.js"></script>
     <script src="../node_modules/d3/dist/d3.min.js"></script>
@@ -428,7 +108,6 @@
 
       const clock = new THREE.Clock();
 
-      // Our Javascript will go here.
       // To display anything with three.js, we need scene, camera and renderer
       var scene = new THREE.Scene();
       var camera = new THREE.PerspectiveCamera(
@@ -488,7 +167,9 @@
       var spectralDiv = document.getElementById('spectralType');
       var luminosityDiv = document.getElementById('luminosity');
       var distanceDiv = document.getElementById('distance');
-      var coordDiv = document.getElementById('coordinates');
+      var coordXDiv = document.getElementById('coordinatesX');
+      var coordYDiv = document.getElementById('coordinatesY');
+      var coordZDiv = document.getElementById('coordinatesZ');
 
       function loadData() {
         d3.csv('data/hygdata_prepared.csv').then(function(data) {
@@ -548,7 +229,9 @@
               spectralDiv.textContent = 'spectral type: ' + mesh.spectralType;
               luminosityDiv.textContent = 'luminosity: ' + mesh.luminosity;
               distanceDiv.textContent = 'distance: ' + mesh.distance;
-              coordDiv.textContent = 'coordinates: ' + mesh.position.x;
+              coordXDiv.textContent = 'X-coordinates: ' + mesh.position.x;
+              coordYDiv.textContent = 'Y-coordinates: ' + mesh.position.y;
+              coordZDiv.textContent = 'Z-coordinates: ' + mesh.position.z;
 
               prevIntersected = mesh;
             }
@@ -574,42 +257,6 @@
         });
       }
 
-      ////////////////////////////////
-      // Coordinations Scene
-      ////////////////////////////////
-
-      const sceneView = {
-        left: 0,
-        bottom: 0,
-        width: 1.0,
-        height: 1.0
-      };
-
-      const coordScene = new THREE.Scene();
-      // coordScene.background = new THREE.Color('rgba(0, 70, 70, 0.75)');
-
-      const coordSceneRatio = 0.15;
-      const coordSceneSize = 1 - coordSceneRatio;
-      const coordSceneView = {
-        left: sceneView.left + coordSceneSize,
-        bottom: sceneView.bottom + coordSceneSize,
-        width: sceneView.width * coordSceneRatio,
-        height: sceneView.height * coordSceneRatio
-      };
-
-      const coordCamera = new THREE.OrthographicCamera(
-        10 / -2,
-        10 / 2,
-        10 / 2,
-        10 / -2,
-        0.011,
-        1000
-      );
-      coordCamera.position.copy(camera.position);
-
-      const axesHelper = new THREE.AxesHelper(3);
-      coordScene.add(axesHelper);
-
       function onMouseMove(event) {
         event.preventDefault();
         mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
@@ -627,7 +274,9 @@
             'spectral type: ' + INTERSECTED.spectralType;
           luminosityDiv.textContent = 'luminosity: ' + INTERSECTED.luminosity;
           distanceDiv.textContent = 'distance: ' + INTERSECTED.distance;
-          coordDiv.textContent = 'coordinates: ' + INTERSECTED.position.x;
+          coordXDiv.textContent = 'X-coordinates: ' + INTERSECTED.position.x;
+          coordYDiv.textContent = 'Y-coordinates: ' + INTERSECTED.position.y;
+          coordZDiv.textContent = 'Z-coordinates: ' + INTERSECTED.position.z;
         }
       }
 
@@ -694,38 +343,6 @@
         false
       );
 
-      function resizeRendererToDisplaySize(renderer) {
-        const canvas = renderer.domElement;
-        const pixelRatio = window.devicePixelRatio;
-        const width = (canvas.clientWidth * pixelRatio) | 0;
-        const height = (canvas.clientHeight * pixelRatio) | 0;
-        const needResize = canvas.width !== width || canvas.height !== height;
-        if (needResize) {
-          renderer.setSize(width, height, false);
-        }
-        return needResize;
-      }
-
-      function renderSceneInfo(scene, camera, left, bottom, width, height) {
-        const canvas = renderer.domElement;
-        if (resizeRendererToDisplaySize(renderer)) {
-          camera.aspect = canvas.clientWidth / canvas.clientHeight;
-          camera.updateProjectionMatrix();
-        }
-
-        // take the coordinate from 0-1 space, and put them
-        // in screen space, baed on the size of the canvas.
-        var nleft = Math.floor(canvas.width * left);
-        var nbottom = Math.floor(canvas.height * bottom);
-        var nwidth = Math.floor(canvas.width * width);
-        var nheight = Math.floor(canvas.height * height);
-        renderer.setViewport(nleft, nbottom, nwidth, nheight);
-        renderer.setScissor(nleft, nbottom, nwidth, nheight);
-        renderer.setScissorTest(true);
-        // renderer.setClearColor("lightblue");
-        renderer.render(scene, camera);
-      }
-
       // Render the scene
       function animate() {
         requestAnimationFrame(animate);
@@ -747,7 +364,7 @@
             // store color of closest object (for later restoration)
             INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
             // set a new color for closest object
-            INTERSECTED.material.color.setHex(0x00ff00);
+            INTERSECTED.material.color.setHex(0x4fa9a8);
           }
         } // there are no intersections
         else {
@@ -759,26 +376,8 @@
           INTERSECTED = null;
         }
 
-        renderSceneInfo(
-          scene,
-          camera,
-          sceneView.left,
-          sceneView.bottom,
-          sceneView.width,
-          sceneView.height
-        );
-
-        coordCamera.position.copy(camera.position);
-        coordCamera.lookAt(coordScene.position);
-
-        renderSceneInfo(
-          coordScene,
-          coordCamera,
-          coordSceneView.left,
-          coordSceneView.bottom,
-          coordSceneView.width,
-          coordSceneView.height
-        );
+        // render the scene
+        renderer.render(scene, camera);
       }
 
       function onTransitionEnd(event) {
