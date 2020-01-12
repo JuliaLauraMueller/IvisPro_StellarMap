@@ -223,15 +223,15 @@
 
             if (i == 0) {
               selected = mesh;
-              designationDiv.textContent = 'designation: ' + mesh.designation;
+              designationDiv.textContent = 'Designation: ' + mesh.designation;
               constellationDiv.textContent =
-                'constellation: ' + mesh.constellation;
-              spectralDiv.textContent = 'spectral type: ' + mesh.spectralType;
-              luminosityDiv.textContent = 'luminosity: ' + mesh.luminosity;
-              distanceDiv.textContent = 'distance: ' + mesh.distance;
-              coordXDiv.textContent = 'X-coordinates: ' + mesh.position.x;
-              coordYDiv.textContent = 'Y-coordinates: ' + mesh.position.y;
-              coordZDiv.textContent = 'Z-coordinates: ' + mesh.position.z;
+                'Constellation: ' + mesh.constellation;
+              spectralDiv.textContent = 'Spectral Type: ' + mesh.spectralType;
+              luminosityDiv.textContent = 'Luminosity: ' + mesh.luminosity;
+              distanceDiv.textContent = 'Distance: ' + mesh.distance;
+              coordXDiv.textContent = 'X-Coordinates: ' + mesh.position.x;
+              coordYDiv.textContent = 'Y-Coordinates: ' + mesh.position.y;
+              coordZDiv.textContent = 'Z-Coordinates: ' + mesh.position.z;
 
               prevIntersected = mesh;
             }
@@ -267,16 +267,16 @@
         event.preventDefault();
         if (INTERSECTED) {
           designationDiv.textContent =
-            'designation: ' + INTERSECTED.designation;
+            'Designation: ' + INTERSECTED.designation;
           constellationDiv.textContent =
-            'constellation: ' + INTERSECTED.constellation;
+            'Constellation: ' + INTERSECTED.constellation;
           spectralDiv.textContent =
-            'spectral type: ' + INTERSECTED.spectralType;
-          luminosityDiv.textContent = 'luminosity: ' + INTERSECTED.luminosity;
-          distanceDiv.textContent = 'distance: ' + INTERSECTED.distance;
-          coordXDiv.textContent = 'X-coordinates: ' + INTERSECTED.position.x;
-          coordYDiv.textContent = 'Y-coordinates: ' + INTERSECTED.position.y;
-          coordZDiv.textContent = 'Z-coordinates: ' + INTERSECTED.position.z;
+            'Spectral Type: ' + INTERSECTED.spectralType;
+          luminosityDiv.textContent = 'Luminosity: ' + INTERSECTED.luminosity;
+          distanceDiv.textContent = 'Distance: ' + INTERSECTED.distance;
+          coordXDiv.textContent = 'X-Coordinates: ' + INTERSECTED.position.x;
+          coordYDiv.textContent = 'Y-Coordinates: ' + INTERSECTED.position.y;
+          coordZDiv.textContent = 'Z-Coordinates: ' + INTERSECTED.position.z;
         }
       }
 
