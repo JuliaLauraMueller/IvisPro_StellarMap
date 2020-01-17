@@ -119,31 +119,29 @@
 
       camera.position.z = 15;
 
+      // new TextLoadingManager
       const loadingManager = new THREE.LoadingManager(() => {
         const loadingScreen = document.getElementById('loading-screen');
         loadingScreen.classList.add('fade-out');
-
-        // optional: remove loader from DOM via event listener
         loadingScreen.addEventListener('transitionend', onTransitionEnd);
       });
 
+      // new TextLoader
       const loader = new THREE.TextureLoader();
       const bgTexture = loader.load('img/milkyWayBackground.jpg');
       scene.background = bgTexture;
-
       var starTexture = loader.load('img/grey_star4.jpg');
 
+      // new WebGLRenderer
       var renderer = new THREE.WebGLRenderer({ alpha: true });
-      //renderer.setClearColor('rgb(0, 70, 70)', 0.75);
       renderer.setClearColor(0x000000, 1);
       renderer.setPixelRatio(window.devicePixelRatio);
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.getElementById('container').appendChild(renderer.domElement);
 
+      // new CameraControl
       var controls = new CameraControls(camera, renderer.domElement);
-
       var light = new THREE.PointLight(0xffff00);
-
       light.position.set(10, 0, 25);
       scene.add(light);
 
@@ -153,13 +151,12 @@
       var prevIntersected;
       var oldColor;
 
-      // document.addEventListener('mousemove', onMouseMove, false);
       window.addEventListener('resize', onWindowResize, false);
       window.addEventListener('mousemove', onMouseMove, false);
       window.addEventListener('mousedown', onMouseDown, false);
       window.addEventListener('dblclick', onDblclick, false);
 
-      // load file
+      // get all elements by id
       const hygData = [];
       var selected;
       var designationDiv = document.getElementById('designation');
@@ -171,6 +168,9 @@
       var coordYDiv = document.getElementById('coordinatesY');
       var coordZDiv = document.getElementById('coordinatesZ');
 
+      /**
+       * loads data from cvs-file
+       */
       function loadData() {
         d3.csv('data/hygdata_prepared.csv').then(function(data) {
           data.forEach(function(d) {
@@ -194,7 +194,6 @@
             var luminosity = hygData[i].luminosity;
             var spectralType = hygData[i].spectralType;
             var constellation = hygData[i].constellation;
-            //console.log(hygData[i].spectralColor);
 
             var coordinates = new THREE.Vector3(x, y, z);
             var SphereGeometry = new THREE.SphereGeometry(
@@ -206,7 +205,7 @@
               color: spectralColor,
               map: starTexture
             });
-            // var mesh = new THREE.Mesh(SphereGeometry, material);
+
             var mesh = new Star(
               SphereGeometry,
               material,
@@ -343,7 +342,9 @@
         false
       );
 
-      // Render the scene
+      /**
+       * renders the scene with the data
+       */
       function animate() {
         requestAnimationFrame(animate);
         const delta = clock.getDelta();
@@ -372,11 +373,10 @@
           if (INTERSECTED)
             INTERSECTED.material.color.setHex(INTERSECTED.currentHex);
           // remove previous intersection object reference
-          //     by setting current intersection object to "nothing"
+          // by setting current intersection object to "nothing"
           INTERSECTED = null;
         }
 
-        // render the scene
         renderer.render(scene, camera);
       }
 
